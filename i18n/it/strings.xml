@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<!--TABS -->
+	<string name="expirationlist">Scadenze</string>	
+	<string name="add">Aggiungi</string>
+	
+	<!-- LABELS -->
+	<string name="labelname">Nome:</string>
+	<string name="labelexpireon">Scadenza:</string>
+	<string name="labeltags">Tags:</string>
+	
+	<!-- FIELDS -->
+	<string name="hintname">Nome</string>
+	<string name="hintexpireon">Clicca per selezionare</string>
+	
+	<!-- ACTIONS -->
+	<string name="buttonsave">Salva</string>
+</resources>
