@@ -1,21 +1,32 @@
-ROW_COMMONS = {
-	height:100
+var ROW_COMMONS = {
+	height:100,
+	layout:"composite",
+	touchEnabled:false
 };
 
-LABEL_COMMONS = {
+var LABEL_COMMONS = {
 	left:10,
 	font: { fontSize:30 },
 	textAlign:Ti.UI.TEXT_ALIGNMENT_LEFT
 };
 
-FIELD_COMMONS = {
+var FIELD_COMMONS = {
 	right:10,
 	height:100,
 	width: 300,
 	bottom:0,
 	font: { fontSize:30 },
-	textAlign:Ti.UI.TEXT_ALIGNMENT_LEFT
+	textAlign:Ti.UI.TEXT_ALIGNMENT_LEFT,
+	focusable:true
 };
+
+var FIELDS = {
+	_id:null,
+	name:null,
+	expireOn:null,
+	tags:null
+};
+
 
 JMerge = function(defaults, newJson){
 	
@@ -31,20 +42,17 @@ JMerge = function(defaults, newJson){
 
 NewItem = function(){
 	
-	var self = Ti.UI.createTableView({
+	var self = Ti.UI.createView({
+		layout:"vertical",
 		width:Ti.UI.FILL,
 		height:Ti.UI.FILL,
-		footerView:NewItem.getButtons(),
 		top:0
 	});
 	
-	var content = [];
-	content.push(NewItem.getName());
-	content.push(NewItem.getExpireOn());
-	content.push(NewItem.getTags());
-	
-	self.setData(content);
-	
+	self.add(NewItem.getName());
+	self.add(NewItem.getExpireOn());
+	self.add(NewItem.getTags());
+	self.add(NewItem.getButtons());
 	
 	return self;
 	
@@ -52,17 +60,16 @@ NewItem = function(){
 
 NewItem.getName = function(){
 	
-	var self = Ti.UI.createTableViewRow(JMerge(ROW_COMMONS));
+	var self = Ti.UI.createView(JMerge(ROW_COMMONS));
 	
 	var label = Ti.UI.createLabel(JMerge(LABEL_COMMONS, {
-		text:L("labelname")
+		text:L('labelname')
 	}));
 	
 	
-	var field = Ti.UI.createTextField(JMerge(FIELD_COMMONS,{
-		borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
-  		hintText : L("hintname"),
-	}));
+	var field = Ti.UI.createTextField(JMerge(FIELD_COMMONS));
+	
+	FIELDS.name = field;
 	
 	self.add(label);
 	self.add(field);
@@ -72,30 +79,32 @@ NewItem.getName = function(){
 
 NewItem.getExpireOn = function(){
 	
-	var self = Ti.UI.createTableViewRow(JMerge(ROW_COMMONS));
+	var self = Ti.UI.createView(JMerge(ROW_COMMONS));
 	
 	var label = Ti.UI.createLabel(JMerge(LABEL_COMMONS, {
-		text:L("labelexpireon")
+		text:L('labelexpireon')
 	}));
 	
 	var field = Ti.UI.createLabel(JMerge(FIELD_COMMONS,{
-		text:L("hintexpireon")
+		text:L('hintexpireon')
 	}));
 	
+	FIELDS.expireOn = field;
 	
 	
 	field.addEventListener("click", function(e){
 		var picker = Ti.UI.createPicker({
 		  type:Ti.UI.PICKER_TYPE_DATE,
 		  minDate:new Date(2009,0,1),
-		  maxDate:new Date(2014,11,31)
+		  maxDate:new Date(2014,11,31),
+		  locale:"it-IT"
 		});
 		picker.showDatePickerDialog({
 			value:new Date(),
 			callback:function(event){
 				if(!event.cancel){
 					field.value = event.value;
-					field.text = (event.value.getMonth() + 1) + '/' + event.value.getDate() + '/' + event.value.getFullYear();	
+					field.text = event.value.getFullYear() + "-" + (event.value.getMonth()+1) + '-' + event.value.getDate();	
 				}
 			}
 		});
@@ -108,13 +117,15 @@ NewItem.getExpireOn = function(){
 };
 
 NewItem.getTags = function(){
-	var self = Ti.UI.createTableViewRow(JMerge(ROW_COMMONS));
+	var self = Ti.UI.createView(JMerge(ROW_COMMONS));
 	
 	var label = Ti.UI.createLabel(JMerge(LABEL_COMMONS, {
-		text:L("labeltags")
+		text:L('labeltags')
 	}));
 	
 	var field = Ti.UI.createPicker(JMerge(FIELD_COMMONS));
+	
+	FIELDS.tags = field;
 	
 	var data = [];
 	data[0]=Ti.UI.createPickerRow({title:'Latticini'});
@@ -131,9 +142,14 @@ NewItem.getTags = function(){
 	return self;
 };
 
+NewItem.getValues = function(){
+	
+};
+
+
 NewItem.getButtons = function(){
 	var self = Ti.UI.createView({
-		layout:"vertical",
+		layout:"horizontal",
 		height:Ti.UI.SIZE,
 		width:Ti.UI.FILL
 	});
@@ -149,11 +165,17 @@ NewItem.getButtons = function(){
 	});
 	
 	buttonSave.addEventListener("click", function(e){
+		
+		DATA_BINDER.insertExpiration({_id:null,name:FIELDS.name.getValue(), expireOn:FIELDS.expireOn.getText(), tags:FIELDS.tags.getValue()});
+		
 		var toast = Ti.UI.createNotification({
-		    message:"Clicked save",
+		    message:"Item saved",
 		    duration: Ti.UI.NOTIFICATION_DURATION_LONG
 		});
 		toast.show();
+		
+		Ti.App.fireEvent("expirations.change");
+		
 	});
 	
 	self.add(buttonSave);

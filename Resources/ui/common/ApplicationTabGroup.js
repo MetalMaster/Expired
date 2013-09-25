@@ -1,4 +1,5 @@
-function ApplicationTabGroup(Window) {
+
+function ApplicationTabGroup(Window,expirationList) {
 	//create module instance
 	var self = Ti.UI.createTabGroup({title:"Expired"});
 	
@@ -6,9 +7,7 @@ function ApplicationTabGroup(Window) {
 	var win1 = new Window(),
 		win2 = new Window();
 	
-	var ExpirationList = require('ui/common/ExpirationList');
 	
-	var expirationList = new ExpirationList();
 	win1.add(expirationList);
 	expirationList.reload();
 	

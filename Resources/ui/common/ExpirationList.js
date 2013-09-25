@@ -6,6 +6,7 @@ ExpirationList = function(){
 	
 	self.reload = ExpirationList.reloadData;
 	
+	
 	return self;
 };
 
@@ -33,24 +34,17 @@ ExpirationList.getTemplates = function(){
 	            }
 	        },
 	        {
-	            type: 'Ti.UI.ImageView',  // Use an image view
-	            bindId: 'icon',            // Bind ID for this image view
-	            properties: {             // Sets the ImageView.image property
+	            type: 'Ti.UI.ImageView', 
+	            bindId: 'icon',            
+	            properties: {             
 	            	width: '46px', height: '46px', right: '20dp'
 	            }
-	        }                 
-	        // {
-	            // type: 'Ti.UI.Button',   // Use a button
-	            // bindId: 'button',       // Bind ID for this button
-	            // properties: {           // Sets several button properties
-	                // width: '80dp',
-	                // height: '30dp',                        	
-	                // right: '10dp',
-	                // title: 'press me'
-	            // }
-	            // //events: { click : report }  // Binds a callback to the button's click event
-	        // }
-	    ]
+	        }
+	    ],
+	    events:{
+        	click: ExpirationList.onClick,
+        	swipe: ExpirationList.onSwipe 
+        }       
 	};
 	
 	return self;
@@ -61,36 +55,47 @@ parseDate = function(inputString){
 	return new Date(parts[0], parts[1]-1, parts[2]);
 };
 
+ExpirationList.onClick = function(e){
+	Ti.API.info("Cliccked item : " + e.itemId);
+	Ti.App.fireEvent("expirations.edit", {itemId:e.itemId});
+	
+};
+
+ExpirationList.onSwipe = function(e){
+	Ti.API.info("Swiped item: " + e.itemId);
+};
+
 ExpirationList.reloadData = function(){
 	
 	var data = ExpirationList.getData();
-		
+	
 	var section = Ti.UI.createListSection();
 	
 	var items = [];
-	for(var i=0, ilen=data.length; i<ilen; i++){
-		var item = data[i];
-		var _icon = null;
-		var expiredOn = parseDate(item.expireOn).getTime();
-		var now = new Date().getTime();
-		var warnDate = now + 172800000;
-		if(now > expiredOn)
-			_icon = "/images/icon_expired.png";
-		else if(warnDate > expiredOn)
-			_icon = "/images/icon_warning.png";
-		
-		Ti.API.info("Icon: " + _icon);
-		
-		items.push(
-			{
-				name:{text:item.name},
-				expireOn:{text:item.expireOn},
-				icon:{image:_icon},
-				properties : {
-		            itemId: item._id,
-		            accessoryType: Ti.UI.LIST_ACCESSORY_TYPE_DISCLOSURE
-		        }
-			});
+	
+	if(data){
+		for(var i=0, ilen=data.length; i<ilen; i++){
+			var item = data[i];
+			var _icon = null;
+			var expiredOn = parseDate(item.expireOn).getTime();
+			var now = new Date().getTime();
+			var warnDate = now + 172800000;
+			if(now > expiredOn)
+				_icon = "/images/icon_expired.png";
+			else if(warnDate > expiredOn)
+				_icon = "/images/icon_warning.png";
+			
+			items.push(
+				{
+					name:{text:item.name},
+					expireOn:{text:item.expireOn},
+					icon:{image:_icon},
+					properties : {
+			            itemId: item._id,
+			            accessoryType: Ti.UI.LIST_ACCESSORY_TYPE_DISCLOSURE
+			        }
+				});
+		}
 	}
 	
 	section.setItems(items);
@@ -102,6 +107,7 @@ ExpirationList.reloadData = function(){
 };
 
 ExpirationList.getData = function(){
+	/*
 	var dummy = [
 		{
 			_id:"AABB",
@@ -124,6 +130,11 @@ ExpirationList.getData = function(){
 	];
 	
 	return dummy;
+	*/
+	
+	return DATA_BINDER.getExpirations();
+	
+	
 };
 
 module.exports = ExpirationList;

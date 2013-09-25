@@ -15,6 +15,9 @@ if (Ti.version < 1.8 ) {
 	alert('Sorry - this application template requires Titanium Mobile SDK 1.8 or later');
 }
 
+var DATA_BINDER = null;
+var TAB_GROUP = null;
+
 // This is a single context application with mutliple windows in a stack
 (function() {
 	//determine platform and form factor and render approproate components
@@ -26,6 +29,11 @@ if (Ti.version < 1.8 ) {
 	//considering tablet to have one dimension over 900px - this is imperfect, so you should feel free to decide
 	//yourself what you consider a tablet form factor for android
 	var isTablet = osname === 'ipad' || (osname === 'android' && (width > 899 || height > 899));
+
+	var DataBinder = require('ui/common/DataBinder');
+	
+	DATA_BINDER = new DataBinder();
+	DATA_BINDER.initialize();
 	
 	var Window;
 	if (isTablet) {
@@ -35,6 +43,23 @@ if (Ti.version < 1.8 ) {
 		Window = require('ui/handheld/ApplicationWindow');
 	}
 
+	var ExpirationList = require('ui/common/ExpirationList');
+	var expirationList = new ExpirationList();
+
+	Ti.App.addEventListener("expirations.change",function(){
+		expirationList.reload();	
+	});
+	
+	Ti.App.addEventListener("expirations.edit",function(e){
+		Ti.API.info("Fired event expirations.edit with itemId: "+ e.itemId);
+		TAB_GROUP.setActiveTab(1);
+		//TODO: pass values to form
+	});
+
 	var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
-	new ApplicationTabGroup(Window).open();
+	TAB_GROUP = new ApplicationTabGroup(Window,expirationList);
+	TAB_GROUP.open();
+	
+	
+	
 })();
