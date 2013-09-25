@@ -15,4 +15,8 @@
 	
 	<!-- ACTIONS -->
 	<string name="buttonsave">Salva</string>
+	<string name="buttonreset">Reset</string>
+	
+	<!-- MESSAGES -->
+	<string name="msgitemsaved">Elemento salvato</string>
 </resources>

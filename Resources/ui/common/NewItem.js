@@ -54,8 +54,17 @@ NewItem = function(){
 	self.add(NewItem.getTags());
 	self.add(NewItem.getButtons());
 	
+	self.bindValues = NewItem.bindValues;
+	
 	return self;
 	
+};
+
+NewItem.bindValues = function(json){
+	FIELDS._id = json._id;
+	FIELDS.name.setValue(json.name);
+	FIELDS.expireOn.setText(json.expireOn);
+	FIELDS.tags.setValue(json.tags);
 };
 
 NewItem.getName = function(){
@@ -151,34 +160,55 @@ NewItem.getButtons = function(){
 	var self = Ti.UI.createView({
 		layout:"horizontal",
 		height:Ti.UI.SIZE,
-		width:Ti.UI.FILL
+		width:Ti.UI.FILL,
+		left:10,
+		right:10,
+		top:5,
+		bottom:5
 	});
 	
 	var buttonSave = Ti.UI.createButton({
-		bottom:5,
 		title:L("buttonsave"),
-		width:Ti.UI.FILL,
-		height:Ti.UI.SIZE,
-		left:10,
-		right:10,
-		top:5
+		height:Ti.UI.SIZE
+	});
+	
+	var buttonReset = Ti.UI.createButton({
+		title:L("buttonreset"),
+		height:Ti.UI.SIZE
 	});
 	
 	buttonSave.addEventListener("click", function(e){
 		
-		DATA_BINDER.insertExpiration({_id:null,name:FIELDS.name.getValue(), expireOn:FIELDS.expireOn.getText(), tags:FIELDS.tags.getValue()});
+		var values = {_id:FIELDS._id,name:FIELDS.name.getValue(), expireOn:FIELDS.expireOn.getText(), tags:FIELDS.tags.getValue()};
+		if(values._id)
+			CONTROLLER.getDataBinder().updateExpiration(values);
+		else
+			CONTROLLER.getDataBinder().insertExpiration(values);
 		
 		var toast = Ti.UI.createNotification({
-		    message:"Item saved",
+		    message:L('msgitemsaved'),
 		    duration: Ti.UI.NOTIFICATION_DURATION_LONG
 		});
 		toast.show();
 		
-		Ti.App.fireEvent("expirations.change");
+		CONTROLLER.onExpirationsChange();
+		
+		CONTROLLER.getTabGroup().setActiveTab(0);
+		
+	});
+	
+	buttonReset.addEventListener("click", function(e){
+		
+		FIELDS._id = null;
+		FIELDS.name.setValue(null);
+		FIELDS.expireOn.setText(L('hintexpireon'));
+		FIELDS.tags.setValue(null);
+		
 		
 	});
 	
 	self.add(buttonSave);
+	self.add(buttonReset);
 	
 	return self;
 };

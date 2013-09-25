@@ -56,13 +56,11 @@ parseDate = function(inputString){
 };
 
 ExpirationList.onClick = function(e){
-	Ti.API.info("Cliccked item : " + e.itemId);
-	Ti.App.fireEvent("expirations.edit", {itemId:e.itemId});
-	
+	CONTROLLER.onExpirationEdit({itemId:e.itemId});
 };
 
 ExpirationList.onSwipe = function(e){
-	Ti.API.info("Swiped item: " + e.itemId);
+	CONTROLLER.onExpirationDelete({itemId:e.itemId});
 };
 
 ExpirationList.reloadData = function(){
@@ -107,34 +105,7 @@ ExpirationList.reloadData = function(){
 };
 
 ExpirationList.getData = function(){
-	/*
-	var dummy = [
-		{
-			_id:"AABB",
-			name:"Latte",
-			expireOn:"2013-05-01",
-			tags:["Colazione", "Bevande"]
-		},
-		{
-			_id:"BBCC",
-			name:"Parmiggiano",
-			expireOn:"2013-09-25",
-			tags:["Formaggi"]
-		},
-		{
-			_id:"DDEE",
-			name:"Prosciutto cotto",
-			expireOn:"2013-12-01",
-			tags:["Affettati"]
-		}
-	];
-	
-	return dummy;
-	*/
-	
-	return DATA_BINDER.getExpirations();
-	
-	
+	return CONTROLLER.getDataBinder().getExpirations();
 };
 
 module.exports = ExpirationList;
