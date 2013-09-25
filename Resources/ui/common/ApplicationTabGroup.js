@@ -1,10 +1,10 @@
 
 function ApplicationTabGroup(Window,expirationList) {
 	//create module instance
-	var self = Ti.UI.createTabGroup({title:"Expired"});
+	var self = Ti.UI.createTabGroup();
 	
-	self.win1 = new Window();
-	self.win2 = new Window();
+	self.win1 = new Window(L('expirationlist'));
+	self.win2 = new Window(L('add'));
 	
 	self.win1.add(CONTROLLER.getExpirationList());
 	self.win2.add(CONTROLLER.getItemForm());

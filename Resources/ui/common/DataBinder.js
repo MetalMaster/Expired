@@ -5,7 +5,7 @@ var TABLES = [
 
 var SQL = {
 	INSERT_EXPIRATION:"insert into expirations (_id,name,expireOn,tags) values (?,?,?,?)",
-	SELECT_EXPIRATIONS:"select _id,name,expireOn,tags from expirations order by expireOn desc",
+	SELECT_EXPIRATIONS:"select _id,name,expireOn,tags from expirations order by expireOn asc",
 	SELECT_EXPIRATION:"select _id,name,expireOn,tags from expirations where _id = ?",
 	UPDATE_EXPIRATION:"update expirations set name = ?, expireOn = ?, tags = ? where _id = ?",
 	DELETE_EXPIRATION:"delete from expirations where _id = ?"

@@ -2,11 +2,11 @@
 <ti:app xmlns:ti="http://ti.appcelerator.org">
     <id>it.fuesi.expired</id>
     <name>Expired</name>
-    <version>1.0</version>
-    <publisher>pascotto</publisher>
+    <version>0.1</version>
+    <publisher>Fulvio Pascotto</publisher>
     <url>http://</url>
-    <description>not specified</description>
-    <copyright>2013 by pascotto</copyright>
+    <description>Track your food expirations</description>
+    <copyright>2013 by Fulvio Pascotto</copyright>
     <icon>appicon.png</icon>
     <persistent-wifi>false</persistent-wifi>
     <prerendered-icon>false</prerendered-icon>

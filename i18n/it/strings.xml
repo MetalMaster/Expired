@@ -16,7 +16,15 @@
 	<!-- ACTIONS -->
 	<string name="buttonsave">Salva</string>
 	<string name="buttonreset">Reset</string>
+	<string name="actionconfirm">Conferma</string>
+	<string name="actioncancel">Annulla</string>
 	
 	<!-- MESSAGES -->
 	<string name="msgitemsaved">Elemento salvato</string>
+	<string name="msgitemremoved">Elemento rimosso</string>
+	<string name="msgremoveitem">Rimuovi l'elemento selezionato?</string>
+	<string name="msgloadingdata">Caricamento dati...</string>
+	
+	<!-- TITLES -->
+	<string name="titleremoveitem">Rimuovi elemento</string>
 </resources>

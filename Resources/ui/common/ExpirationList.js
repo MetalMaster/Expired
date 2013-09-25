@@ -60,10 +60,24 @@ ExpirationList.onClick = function(e){
 };
 
 ExpirationList.onSwipe = function(e){
-	CONTROLLER.onExpirationDelete({itemId:e.itemId});
+	var dialog = Ti.UI.createAlertDialog({
+	    cancel: 1,
+	    buttonNames: [L('actionconfirm'), L('actioncancel')],
+	    message: L('msgremoveitem'),
+	    title: L('titleremoveitem')
+  	});
+  	dialog.addEventListener('click', function(event){
+	    if (event.index === 0){
+	    	CONTROLLER.onExpirationDelete({itemId:e.itemId});
+	    	CONTROLLER.toast(L('msgitemremoved'));
+	    }
+	  });
+    dialog.show();
 };
 
 ExpirationList.reloadData = function(){
+	
+	CONTROLLER.showProgress(L('msgloadingdata'));
 	
 	var data = ExpirationList.getData();
 	
@@ -101,6 +115,8 @@ ExpirationList.reloadData = function(){
 		this.replaceSectionAt(0, section);				
 	else
 		this.appendSection(section);
+		
+	CONTROLLER.hideProgress();
 	
 };
 

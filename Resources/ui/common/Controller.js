@@ -16,6 +16,7 @@ Controller = function(){
 	this.initComponents = function(Window){
 		var DataBinder = require('ui/common/DataBinder');
 		this.setDataBinder(new DataBinder());
+		this.getDataBinder().initialize();
 		
 		var NewItem = require('ui/common/NewItem');
 		this.setItemForm(new NewItem());
@@ -95,6 +96,28 @@ Controller = function(){
 		return this.components.DATA_BINDER;
 	};
 	
+	this.toast = function(msg){
+		var toast = Ti.UI.createNotification({
+		    message:msg,
+		    duration: Ti.UI.NOTIFICATION_DURATION_LONG
+		});
+		toast.show();
+	};
+	
+	this.showProgress = function(msg){
+		this.progressIndicator = Ti.UI.Android.createProgressIndicator({
+		  message: msg,
+		  location: Ti.UI.Android.PROGRESS_INDICATOR_DIALOG,
+		  type: Ti.UI.Android.PROGRESS_INDICATOR_INDETERMINANT,
+		  cancelable: false
+		});
+		
+		this.progressIndicator.show();
+	};
+	
+	this.hideProgress = function(){
+		this.progressIndicator.hide();
+	};
 	
 	
 };

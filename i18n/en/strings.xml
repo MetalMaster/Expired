@@ -16,7 +16,16 @@
 	<!-- ACTIONS -->
 	<string name="buttonsave">Save</string>
 	<string name="buttonreset">Reset</string>
+	<string name="actionconfirm">Confirm</string>
+	<string name="actioncancel">Cancel</string>
 	
 	<!-- MESSAGES -->
 	<string name="msgitemsaved">Item Saved</string>
+	<string name="msgitemremoved">Item removed</string>
+	<string name="msgremoveitem">Remove selected item?</string>
+	<string name="msgloadingdata">Loading data...</string>
+	
+	<!-- TITLES -->
+	<string name="titleremoveitem">Remove item</string>
+	
 </resources>

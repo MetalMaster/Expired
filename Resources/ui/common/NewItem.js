@@ -102,6 +102,7 @@ NewItem.getExpireOn = function(){
 	
 	
 	field.addEventListener("click", function(e){
+		FIELDS.name.blur();
 		var picker = Ti.UI.createPicker({
 		  type:Ti.UI.PICKER_TYPE_DATE,
 		  minDate:new Date(2009,0,1),
@@ -151,9 +152,35 @@ NewItem.getTags = function(){
 	return self;
 };
 
-NewItem.getValues = function(){
+
+NewItem.save = function(){
+	var values = {_id:FIELDS._id,name:FIELDS.name.getValue(), expireOn:FIELDS.expireOn.getText(), tags:FIELDS.tags.getValue()};
 	
+	var isInsert = !values._id;
+	
+	
+	if(isInsert){
+		CONTROLLER.getDataBinder().insertExpiration(values);
+		NewItem.reset();
+	}else
+		CONTROLLER.getDataBinder().updateExpiration(values);
+	
+	
+	CONTROLLER.toast(L('msgitemsaved'));
+	
+	CONTROLLER.onExpirationsChange();
+	
+	CONTROLLER.getTabGroup().setActiveTab(0);
 };
+
+NewItem.reset = function(){
+	FIELDS._id = null;
+	FIELDS.name.setValue(null);
+	FIELDS.expireOn.setText(L('hintexpireon'));
+	FIELDS.tags.setValue(null);
+};
+
+
 
 
 NewItem.getButtons = function(){
@@ -178,33 +205,11 @@ NewItem.getButtons = function(){
 	});
 	
 	buttonSave.addEventListener("click", function(e){
-		
-		var values = {_id:FIELDS._id,name:FIELDS.name.getValue(), expireOn:FIELDS.expireOn.getText(), tags:FIELDS.tags.getValue()};
-		if(values._id)
-			CONTROLLER.getDataBinder().updateExpiration(values);
-		else
-			CONTROLLER.getDataBinder().insertExpiration(values);
-		
-		var toast = Ti.UI.createNotification({
-		    message:L('msgitemsaved'),
-		    duration: Ti.UI.NOTIFICATION_DURATION_LONG
-		});
-		toast.show();
-		
-		CONTROLLER.onExpirationsChange();
-		
-		CONTROLLER.getTabGroup().setActiveTab(0);
-		
+		NewItem.save();
 	});
 	
 	buttonReset.addEventListener("click", function(e){
-		
-		FIELDS._id = null;
-		FIELDS.name.setValue(null);
-		FIELDS.expireOn.setText(L('hintexpireon'));
-		FIELDS.tags.setValue(null);
-		
-		
+		NewItem.reset();
 	});
 	
 	self.add(buttonSave);
