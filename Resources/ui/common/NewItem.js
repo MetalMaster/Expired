@@ -168,12 +168,12 @@ NewItem.getButtons = function(){
 	});
 	
 	var buttonSave = Ti.UI.createButton({
-		title:L("buttonsave"),
+		title:L('buttonsave'),
 		height:Ti.UI.SIZE
 	});
 	
 	var buttonReset = Ti.UI.createButton({
-		title:L("buttonreset"),
+		title:L('buttonreset'),
 		height:Ti.UI.SIZE
 	});
 	
