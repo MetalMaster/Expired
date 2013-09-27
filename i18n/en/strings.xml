@@ -7,7 +7,7 @@
 	<!-- LABELS -->
 	<string name="labelname">Name:</string>
 	<string name="labelexpireon">Expiration date:</string>
-	<string name="labeltags">Tags:</string>
+	<string name="labelcategory">Category:</string>
 	
 	<!-- FIELDS -->
 	<string name="hintname">Name</string>

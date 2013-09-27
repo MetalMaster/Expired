@@ -1,9 +1,9 @@
-#appname: Expired
-#appid: it.fuesi.expired
-#type: mobile
-#guid: 94b18c96-4e97-416a-abc9-6921acb2b8b7
-#version: 1.0
-#publisher: not specified
-#url: not specified
-#image: appicon.png
-#desc: not specified
+#appname:Expired
+#appid:it.fuesi.expired
+#type:mobile
+#guid:94b18c96-4e97-416a-abc9-6921acb2b8b7
+#version:1.0
+#publisher:Fulvio Pascotto
+#url:http://
+#image:appicon.png
+#desc:Track your food expirations

@@ -2,7 +2,7 @@
 <ti:app xmlns:ti="http://ti.appcelerator.org">
     <id>it.fuesi.expired</id>
     <name>Expired</name>
-    <version>0.1</version>
+    <version>1.0</version>
     <publisher>Fulvio Pascotto</publisher>
     <url>http://</url>
     <description>Track your food expirations</description>
@@ -29,13 +29,13 @@
         </orientations>
     </iphone>
     <android xmlns:android="http://schemas.android.com/apk/res/android">
-                <tool-api-level>14</tool-api-level>
-                <manifest>
-                        <uses-sdk android:maxSdkVersion="18"
-                                android:minSdkVersion="8" android:targetSdkVersion="14"/>
-                        <application android:theme="@android:style/Theme.Holo.Light"/>
-                </manifest>
-        </android>
+        <tool-api-level>14</tool-api-level>
+        <manifest>
+            <uses-sdk android:maxSdkVersion="18"
+                android:minSdkVersion="8" android:targetSdkVersion="14"/>
+            <application android:theme="@android:style/Theme.Holo.Light"/>
+        </manifest>
+    </android>
     <mobileweb>
         <precache/>
         <splash>

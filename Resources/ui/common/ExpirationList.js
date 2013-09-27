@@ -50,10 +50,6 @@ ExpirationList.getTemplates = function(){
 	return self;
 };
 
-parseDate = function(inputString){
-	var parts = inputString.split('-');
-	return new Date(parts[0], parts[1]-1, parts[2]);
-};
 
 ExpirationList.onClick = function(e){
 	CONTROLLER.onExpirationEdit({itemId:e.itemId});
@@ -89,7 +85,7 @@ ExpirationList.reloadData = function(){
 		for(var i=0, ilen=data.length; i<ilen; i++){
 			var item = data[i];
 			var _icon = null;
-			var expiredOn = parseDate(item.expireOn).getTime();
+			var expiredOn = item.expireOn;
 			var now = new Date().getTime();
 			var warnDate = now + 172800000;
 			if(now > expiredOn)
@@ -100,7 +96,7 @@ ExpirationList.reloadData = function(){
 			items.push(
 				{
 					name:{text:item.name},
-					expireOn:{text:item.expireOn},
+					expireOn:{text:CONTROLLER.formatDate(CONTROLLER.parseDate(item.expireOn))},
 					icon:{image:_icon},
 					properties : {
 			            itemId: item._id,

@@ -119,6 +119,14 @@ Controller = function(){
 		this.progressIndicator.hide();
 	};
 	
+	this.parseDate = function(inputString){
+		return new Date(inputString);
+	};
+
+	this.formatDate = function(_date){
+		return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
+	};
+	
 	
 };
 

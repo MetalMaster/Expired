@@ -1,13 +1,13 @@
 var TABLES = [
 	"drop table expirations",
-	"create table if not exists expirations (_id TEXT,name TEXT, expireOn TEXT, tags TEXT)"
+	"create table if not exists expirations (_id TEXT,name TEXT, expireOn INTEGER, category TEXT)"
 ];
 
 var SQL = {
-	INSERT_EXPIRATION:"insert into expirations (_id,name,expireOn,tags) values (?,?,?,?)",
-	SELECT_EXPIRATIONS:"select _id,name,expireOn,tags from expirations order by expireOn asc",
-	SELECT_EXPIRATION:"select _id,name,expireOn,tags from expirations where _id = ?",
-	UPDATE_EXPIRATION:"update expirations set name = ?, expireOn = ?, tags = ? where _id = ?",
+	INSERT_EXPIRATION:"insert into expirations (_id,name,expireOn,category) values (?,?,?,?)",
+	SELECT_EXPIRATIONS:"select _id,name,expireOn,category from expirations order by expireOn asc",
+	SELECT_EXPIRATION:"select _id,name,expireOn,category from expirations where _id = ?",
+	UPDATE_EXPIRATION:"update expirations set name = ?, expireOn = ?, category = ? where _id = ?",
 	DELETE_EXPIRATION:"delete from expirations where _id = ?"
 };
 
@@ -31,7 +31,11 @@ DataBinder = function(){
 	this.checkTables = function(){
 		var db = this.openSession();
 		for(var i=0; i<TABLES.length; i++){
-			db.execute(TABLES[i]);
+			try{
+				db.execute(TABLES[i]);
+			}catch(e){
+				console.error("Error executing script: " + TABLES[i]);
+			}
 		}
 		this.closeSession(db);
 	};
@@ -46,7 +50,7 @@ DataBinder = function(){
 		  		_id:rows.fieldByName('_id'),
 		  		name:rows.fieldByName('name'),
 		  		expireOn:rows.fieldByName('expireOn'),
-		  		tags:rows.fieldByName('tags')
+		  		category:rows.fieldByName('category')
 		  };
 		  array.push(json);
 		  rows.next();
@@ -64,7 +68,7 @@ DataBinder = function(){
 	  		_id:rows.fieldByName('_id'),
 	  		name:rows.fieldByName('name'),
 	  		expireOn:rows.fieldByName('expireOn'),
-	  		tags:rows.fieldByName('tags')
+	  		category:rows.fieldByName('category')
 	  	};
 		rows.close();
 		return json;
@@ -85,7 +89,7 @@ DataBinder = function(){
 	this.updateExpiration = function(json){
 		var db = this.openSession();
 		
-		var values = [json.name, json.expireOn, json.tags, json._id];
+		var values = [json.name, json.expireOn, json.category, json._id];
 		
 		db.execute(SQL.UPDATE_EXPIRATION, values);
 		
@@ -106,14 +110,14 @@ DataBinder = function(){
 		this.insertExpiration({
 			_id:null,
 			name:"Latte",
-			expireOn:"2013-03-24",
-			tags:"Bevande"
+			expireOn:new Date("2013","03","24").getTime(),
+			category:"Bevande"
 		});
 		this.insertExpiration({
 			_id:null,
 			name:"Pane",
-			expireOn:"2013-10-01",
-			tags:"Panetteria"
+			expireOn:new Date("2013","10","01").getTime(),
+			category:"Panetteria"
 		});
 	};
 	

@@ -24,7 +24,7 @@ var FIELDS = {
 	_id:null,
 	name:null,
 	expireOn:null,
-	tags:null
+	category:null
 };
 
 
@@ -51,7 +51,7 @@ NewItem = function(){
 	
 	self.add(NewItem.getName());
 	self.add(NewItem.getExpireOn());
-	self.add(NewItem.getTags());
+	self.add(NewItem.getCategory());
 	self.add(NewItem.getButtons());
 	
 	self.bindValues = NewItem.bindValues;
@@ -63,8 +63,9 @@ NewItem = function(){
 NewItem.bindValues = function(json){
 	FIELDS._id = json._id;
 	FIELDS.name.setValue(json.name);
-	FIELDS.expireOn.setText(json.expireOn);
-	FIELDS.tags.setValue(json.tags);
+	FIELDS.expireOn.value = json.expireOn;
+	FIELDS.expireOn.setText(CONTROLLER.formatDate(CONTROLLER.parseDate(json.expireOn)));
+	FIELDS.category.setValue(json.category);
 };
 
 NewItem.getName = function(){
@@ -100,7 +101,6 @@ NewItem.getExpireOn = function(){
 	
 	FIELDS.expireOn = field;
 	
-	
 	field.addEventListener("click", function(e){
 		FIELDS.name.blur();
 		var picker = Ti.UI.createPicker({
@@ -110,11 +110,11 @@ NewItem.getExpireOn = function(){
 		  locale:"it-IT"
 		});
 		picker.showDatePickerDialog({
-			value:new Date(),
+			value:(field.value ? field.value : new Date()),
 			callback:function(event){
 				if(!event.cancel){
 					field.value = event.value;
-					field.text = event.value.getFullYear() + "-" + (event.value.getMonth()+1) + '-' + event.value.getDate();	
+					field.text = event.value.getDate() + "/" + (event.value.getMonth()+1) + '/' + event.value.getFullYear();	
 				}
 			}
 		});
@@ -126,16 +126,16 @@ NewItem.getExpireOn = function(){
 	return self;
 };
 
-NewItem.getTags = function(){
+NewItem.getCategory = function(){
 	var self = Ti.UI.createView(JMerge(ROW_COMMONS));
 	
 	var label = Ti.UI.createLabel(JMerge(LABEL_COMMONS, {
-		text:L('labeltags')
+		text:L('labelcategory')
 	}));
 	
 	var field = Ti.UI.createPicker(JMerge(FIELD_COMMONS));
 	
-	FIELDS.tags = field;
+	FIELDS.category = field;
 	
 	var data = [];
 	data[0]=Ti.UI.createPickerRow({title:'Latticini'});
@@ -154,7 +154,7 @@ NewItem.getTags = function(){
 
 
 NewItem.save = function(){
-	var values = {_id:FIELDS._id,name:FIELDS.name.getValue(), expireOn:FIELDS.expireOn.getText(), tags:FIELDS.tags.getValue()};
+	var values = {_id:FIELDS._id,name:FIELDS.name.getValue(), expireOn:FIELDS.expireOn.value.getTime(), category:FIELDS.category.getValue()};
 	
 	var isInsert = !values._id;
 	
@@ -177,7 +177,7 @@ NewItem.reset = function(){
 	FIELDS._id = null;
 	FIELDS.name.setValue(null);
 	FIELDS.expireOn.setText(L('hintexpireon'));
-	FIELDS.tags.setValue(null);
+	FIELDS.category.setValue(null);
 };
 
 
