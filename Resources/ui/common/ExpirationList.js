@@ -20,7 +20,9 @@ ExpirationList.getTemplates = function(){
 	            properties: {
 	                left: '10dp',
 	                color:"black",
-	                font: { fontFamily:'Arial', fontSize: '20dp', fontWeight:'bold' }
+	                top:"5dp",
+	                font: { fontFamily:'Arial', fontSize: '20dp', fontWeight:'bold' },
+	                verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_TOP
 	            }
 	        },
 	        {
@@ -30,7 +32,19 @@ ExpirationList.getTemplates = function(){
 	            	color:"gray",
 	            	font: { fontFamily:'Arial', fontSize: '10dp' },
 	            	left:'10dp',
-	            	top:'35dp'
+	            	top:'30dp',
+	            	verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_TOP
+	            }
+	        },
+	        {
+	            type: 'Ti.UI.Label', 
+	            bindId: 'category',
+	            properties:{
+	            	color:"blue",
+	            	font: { fontFamily:'Arial', fontSize: '10dp' },
+	            	left:'10dp',
+	            	top:'45dp',
+	            	verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_TOP
 	            }
 	        },
 	        {
@@ -98,6 +112,7 @@ ExpirationList.reloadData = function(){
 					name:{text:item.name},
 					expireOn:{text:CONTROLLER.formatDate(CONTROLLER.parseDate(item.expireOn))},
 					icon:{image:_icon},
+					category:{text:item.category},
 					properties : {
 			            itemId: item._id,
 			            accessoryType: Ti.UI.LIST_ACCESSORY_TYPE_DISCLOSURE

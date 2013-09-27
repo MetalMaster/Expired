@@ -79,7 +79,7 @@ DataBinder = function(){
 		
 		json._id = ""+new Date().getTime();
 			
-		var values = [json._id, json.name, json.expireOn, json.tags];
+		var values = [json._id, json.name, json.expireOn, json.category];
 		
 		db.execute(SQL.INSERT_EXPIRATION, values);
 		
