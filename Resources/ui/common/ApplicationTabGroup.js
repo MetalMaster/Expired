@@ -5,9 +5,11 @@ function ApplicationTabGroup(Window,expirationList) {
 	
 	self.win1 = new Window(L('expirationlist'));
 	self.win2 = new Window(L('add'));
+	self.win3 = new Window(L('categories'));
 	
 	self.win1.add(CONTROLLER.getExpirationList());
 	self.win2.add(CONTROLLER.getItemForm());
+	self.win3.add(CONTROLLER.getCategoriesList());
 	
 	var tab1 = Ti.UI.createTab({
 		title: L('expirationlist'),
@@ -23,8 +25,16 @@ function ApplicationTabGroup(Window,expirationList) {
 	});
 	self.win2.containingTab = tab2;
 	
+	var tab3 = Ti.UI.createTab({
+		title: L('categories'),
+		icon: '/images/icon_categories.png',
+		window: self.win3
+	});
+	self.win3.containingTab = tab3;
+	
 	self.addTab(tab1);
 	self.addTab(tab2);
+	self.addTab(tab3);
 	
 	return self;
 };

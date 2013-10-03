@@ -3,6 +3,7 @@
 	<!--TABS -->
 	<string name="expirationlist">Scadenze</string>	
 	<string name="add">Aggiungi</string>
+	<string name="categories">Categorie</string>
 	
 	<!-- LABELS -->
 	<string name="labelname">Nome:</string>
@@ -32,4 +33,8 @@
 	<!-- TITLES -->
 	<string name="titleremoveitem">Rimuovi elemento</string>
 	<string name="titleitemctx">Opzioni</string>
+	
+	<!-- ABOUT -->
+	<string name="abouttitle">Informazioni</string>
+	<string name="aboutcontent">Expired V.1.0\nTieni sotto controllo le scadenze dei tuoi alimenti</string>
 </resources>

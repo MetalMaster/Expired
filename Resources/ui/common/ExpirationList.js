@@ -38,7 +38,7 @@ ExpirationList.getTemplates = function(){
 	        },
 	        {
 	            type: 'Ti.UI.Label', 
-	            bindId: 'category',
+	            bindId: 'categoryDesc',
 	            properties:{
 	            	color:"blue",
 	            	font: { fontFamily:'Arial', fontSize: '10dp' },
@@ -137,8 +137,9 @@ ExpirationList.reloadData = function(){
 					name:{text:item.name},
 					expireOn:{text:CONTROLLER.formatDate(CONTROLLER.parseDate(item.expireOn))},
 					icon:{image:_icon},
-					category:{text:item.category},
+					categoryDesc:{text:item.categoryDesc},
 					properties : {
+						category:item.category,
 			            itemId: item._id,
 			            accessoryType: Ti.UI.LIST_ACCESSORY_TYPE_DISCLOSURE
 			        }

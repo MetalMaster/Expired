@@ -2,6 +2,7 @@ Controller = function(){
 	
 	this.components = {
 		EXPIRATION_LIST:null,
+		CATEGORIES_LIST:null,
 		TAB_GROUP:null,
 		ITEM_FORM:null,
 		DATA_BINDER:null
@@ -9,6 +10,7 @@ Controller = function(){
 	
 	this.events = {
 		EXPIRATIONS_CHANGE:"expirations.change",
+		CATEGORIES_CHANGE:"categories.change",
 		EXPIRATION_EDIT:"expiration.edit",
 		EXPIRATION_DELETE:"expiration.delete"
 	};
@@ -24,6 +26,9 @@ Controller = function(){
 		var ExpirationList = require('ui/common/ExpirationList');
 		this.setExpirationList(new ExpirationList());
 		
+		var CategoriesList = require('ui/common/CategoriesList');
+		this.setCategoriesList(new CategoriesList());
+		
 		var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
 		this.setTabGroup(new ApplicationTabGroup(Window));
 		
@@ -34,6 +39,10 @@ Controller = function(){
 		var self = this;
 		Ti.App.addEventListener(this.events.EXPIRATIONS_CHANGE,function(){
 			self.components.EXPIRATION_LIST.reload();	
+		});
+		
+		Ti.App.addEventListener(this.events.CATEGORIES_CHANGE,function(){
+			self.components.CATEGORIES_LIST.reload();	
 		});
 		
 		Ti.App.addEventListener(this.events.EXPIRATION_EDIT,function(e){
@@ -66,6 +75,14 @@ Controller = function(){
 	
 	this.setExpirationList = function(expirationList){
 		this.components.EXPIRATION_LIST = expirationList;
+	};
+	
+	this.getCategoriesList = function(){
+		return this.components.CATEGORIES_LIST;
+	};
+	
+	this.setCategoriesList = function(categoriesList){
+		this.components.CATEGORIES_LIST = categoriesList;
 	};
 	
 	this.getExpirationList = function(){
@@ -102,6 +119,15 @@ Controller = function(){
 		    duration: Ti.UI.NOTIFICATION_DURATION_LONG
 		});
 		toast.show();
+	};
+	
+	this.alert = function(msg, title){
+		var alert = Ti.UI.createAlertDialog({
+		    message:msg,
+		    title:title,
+		    ok:'Ok'
+		});
+		alert.show();
 	};
 	
 	this.showProgress = function(msg){

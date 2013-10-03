@@ -41,6 +41,30 @@ var CONTROLLER = null;
 	CONTROLLER = new Controller();
 	CONTROLLER.initComponents(Window);
 
+	var actionBar;
+
+	CONTROLLER.getTabGroup().addEventListener("open", function() {
+	    if (Ti.Platform.osname === "android") {
+	        if (! CONTROLLER.getTabGroup().activity) {
+	            Ti.API.error("Can't access action bar on a lightweight window.");
+	        } else {
+	           var activity = CONTROLLER.getTabGroup().getActivity();
+			    activity.onCreateOptionsMenu = function(e) {
+			        var menuItem = e.menu.add({
+			            title : L('abouttitle'),
+			            showAsAction : Ti.Android.SHOW_AS_ACTION_ALWAYS,
+			            icon : "/images/icon_about.png" 
+			        });
+			        menuItem.addEventListener("click", function(e) {
+			            CONTROLLER.alert(L('aboutcontent'), L('abouttitle'));
+			        });
+			    };
+			    activity.invalidateOptionsMenu();
+	        }
+	    }
+	});
+
+
 	CONTROLLER.getTabGroup().open();
 	
 	CONTROLLER.onExpirationsChange();

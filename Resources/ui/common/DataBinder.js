@@ -1,12 +1,16 @@
 var TABLES = [
 	"drop table expirations",
-	"create table if not exists expirations (_id TEXT,name TEXT, expireOn INTEGER, category TEXT)"
+	"drop table categories",
+	"create table if not exists expirations (_id TEXT,name TEXT, expireOn INTEGER, category TEXT)",
+	"create table if not exists categories (_id TEXT,name TEXT)"
 ];
 
 var SQL = {
 	INSERT_EXPIRATION:"insert into expirations (_id,name,expireOn,category) values (?,?,?,?)",
-	SELECT_EXPIRATIONS:"select _id,name,expireOn,category from expirations order by expireOn asc",
-	SELECT_EXPIRATION:"select _id,name,expireOn,category from expirations where _id = ?",
+	INSERT_CATEGORY:"insert into categories (_id,name) values (?,?)",
+	SELECT_EXPIRATIONS:"select _id,name,expireOn,category,(select name from categories C where C._id = E.category) as categoryDesc from expirations E order by expireOn asc",
+	SELECT_CATEGORIES:"select _id,name from categories order by name asc",
+	SELECT_EXPIRATION:"select _id,name,expireOn,category,(select name from categories C where C._id = E.category) as categoryDesc  from expirations E where _id = ?",
 	UPDATE_EXPIRATION:"update expirations set name = ?, expireOn = ?, category = ? where _id = ?",
 	DELETE_EXPIRATION:"delete from expirations where _id = ?"
 };
@@ -50,7 +54,26 @@ DataBinder = function(){
 		  		_id:rows.fieldByName('_id'),
 		  		name:rows.fieldByName('name'),
 		  		expireOn:rows.fieldByName('expireOn'),
-		  		category:rows.fieldByName('category')
+		  		category:rows.fieldByName('category'),
+		  		categoryDesc:rows.fieldByName('categoryDesc')
+		  };
+		  array.push(json);
+		  rows.next();
+		}
+		rows.close();
+		
+		return array;
+	};
+	
+	this.getCategories = function(){
+		var db =this.openSession();
+		var rows = db.execute(SQL.SELECT_CATEGORIES);
+		this.closeSession(db);
+		var array = [];
+		while (rows.isValidRow()){
+		  var json = {
+		  		_id:rows.fieldByName('_id'),
+		  		name:rows.fieldByName('name'),
 		  };
 		  array.push(json);
 		  rows.next();
@@ -68,7 +91,8 @@ DataBinder = function(){
 	  		_id:rows.fieldByName('_id'),
 	  		name:rows.fieldByName('name'),
 	  		expireOn:rows.fieldByName('expireOn'),
-	  		category:rows.fieldByName('category')
+	  		category:rows.fieldByName('category'),
+	  		categoryDesc:rows.fieldByName('categoryDesc')
 	  	};
 		rows.close();
 		return json;
@@ -84,6 +108,22 @@ DataBinder = function(){
 		db.execute(SQL.INSERT_EXPIRATION, values);
 		
 		this.closeSession(db);
+		
+		return json._id;
+	};
+	
+	this.insertCategory = function(json){
+		var db = this.openSession();
+		
+		json._id = ""+new Date().getTime();
+			
+		var values = [json._id, json.name];
+		
+		db.execute(SQL.INSERT_CATEGORY, values);
+		
+		this.closeSession(db);
+		
+		return json._id;
 	};
 	
 	this.updateExpiration = function(json){
@@ -107,17 +147,28 @@ DataBinder = function(){
 	
 	
 	this.insertDummyData = function(){
+		var bevandeId = this.insertCategory({
+			_id:null,
+			name:"Bevande"
+		});
+		
+		var farinaceiId = this.insertCategory({
+			_id:null,
+			name:"Farinacei"
+		});
+		
+		
 		this.insertExpiration({
 			_id:null,
 			name:"Latte",
 			expireOn:new Date("2013","03","24").getTime(),
-			category:"Bevande"
+			category:bevandeId
 		});
 		this.insertExpiration({
 			_id:null,
 			name:"Pane",
 			expireOn:new Date("2013","10","01").getTime(),
-			category:"Panetteria"
+			category:farinaceiId
 		});
 	};
 	

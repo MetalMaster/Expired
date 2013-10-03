@@ -140,11 +140,13 @@ NewItem.getCategory = function(){
 	
 	FIELDS.category = field;
 	
+	
+	var categories = CONTROLLER.getDataBinder().getCategories();
 	var data = [];
-	data[0]=Ti.UI.createPickerRow({title:'Latticini'});
-	data[1]=Ti.UI.createPickerRow({title:'Formaggi'});
-	data[2]=Ti.UI.createPickerRow({title:'Bibite'});
-	data[3]=Ti.UI.createPickerRow({title:'Pasta'});
+	for(var i=0; i<categories.length; i++){
+		var cat = categories[i];
+		data.push(Ti.UI.createPickerRow({title:cat.name, id:cat._id}));
+	}
 	
 	field.add(data);
 	field.selectionIndicator = true;
