@@ -20,6 +20,8 @@
 	<string name="buttonreset">Reset</string>
 	<string name="actionconfirm">Confirm</string>
 	<string name="actioncancel">Cancel</string>
+	<string name="actiondelete">Delete</string>
+	<string name="actionupdate">Update</string>
 	
 	<!-- MESSAGES -->
 	<string name="msgitemsaved">Item Saved</string>
@@ -29,5 +31,6 @@
 	
 	<!-- TITLES -->
 	<string name="titleremoveitem">Remove item</string>
+	<string name="titleitemctx">Options</string>
 	
 </resources>

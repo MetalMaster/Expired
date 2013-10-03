@@ -57,7 +57,8 @@ ExpirationList.getTemplates = function(){
 	    ],
 	    events:{
         	click: ExpirationList.onClick,
-        	swipe: ExpirationList.onSwipe 
+        	swipe: ExpirationList.onSwipe,
+        	longpress: ExpirationList.onLongPress 
         }       
 	};
 	
@@ -69,6 +70,25 @@ ExpirationList.onClick = function(e){
 	CONTROLLER.onExpirationEdit({itemId:e.itemId});
 };
 
+ExpirationList.onLongPress = function(e){
+	var dialog = Ti.UI.createOptionDialog({
+		  cancel: 2,
+		  options: [L('actiondelete'), L('actionupdate'), L('actioncancel')],
+		  selectedIndex: 2,
+		  destructive: 0,
+		  title: 'Options'
+	});
+	
+	dialog.addEventListener("click", function(event){
+		if(event.index === 0)
+			ExpirationList.removeItem(e.itemId);
+		else if (event.index === 1)
+			CONTROLLER.onExpirationEdit({itemId:e.itemId});
+	});
+	
+	dialog.show();
+};
+
 ExpirationList.onSwipe = function(e){
 	var dialog = Ti.UI.createAlertDialog({
 	    cancel: 1,
@@ -78,11 +98,16 @@ ExpirationList.onSwipe = function(e){
   	});
   	dialog.addEventListener('click', function(event){
 	    if (event.index === 0){
-	    	CONTROLLER.onExpirationDelete({itemId:e.itemId});
-	    	CONTROLLER.toast(L('msgitemremoved'));
+	    	ExpirationList.removeItem(e.itemId);
+	    	
 	    }
 	  });
     dialog.show();
+};
+
+ExpirationList.removeItem = function(_itemId){
+	CONTROLLER.onExpirationDelete({itemId:_itemId});
+	CONTROLLER.toast(L('msgitemremoved'));
 };
 
 ExpirationList.reloadData = function(){

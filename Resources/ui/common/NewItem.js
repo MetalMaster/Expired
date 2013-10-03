@@ -63,7 +63,7 @@ NewItem = function(){
 NewItem.bindValues = function(json){
 	FIELDS._id = json._id;
 	FIELDS.name.setValue(json.name);
-	FIELDS.expireOn.value = json.expireOn;
+	FIELDS.expireOn.value = CONTROLLER.parseDate(json.expireOn);
 	FIELDS.expireOn.setText(CONTROLLER.formatDate(CONTROLLER.parseDate(json.expireOn)));
 	FIELDS.category.setValue(json.category);
 };

@@ -20,6 +20,8 @@
 	<string name="buttonreset">Reset</string>
 	<string name="actionconfirm">Conferma</string>
 	<string name="actioncancel">Annulla</string>
+	<string name="actiondelete">Elimina</string>
+	<string name="actionupdate">Modifica</string>
 	
 	<!-- MESSAGES -->
 	<string name="msgitemsaved">Elemento salvato</string>
@@ -29,4 +31,5 @@
 	
 	<!-- TITLES -->
 	<string name="titleremoveitem">Rimuovi elemento</string>
+	<string name="titleitemctx">Opzioni</string>
 </resources>
