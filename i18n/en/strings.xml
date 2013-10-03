@@ -10,8 +10,10 @@
 	<string name="labelcategory">Category:</string>
 	
 	<!-- FIELDS -->
-	<string name="hintname">Name</string>
+	<string name="hintname">Enter item name</string>
 	<string name="hintexpireon">Click here to select</string>
+	<string name="validationrequiredname">The field "name" is mandatory</string>
+	<string name="validationrequiredexpireon">The field "expiration date" is mandatory</string>
 	
 	<!-- ACTIONS -->
 	<string name="buttonsave">Save</string>

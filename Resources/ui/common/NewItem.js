@@ -77,7 +77,10 @@ NewItem.getName = function(){
 	}));
 	
 	
-	var field = Ti.UI.createTextField(JMerge(FIELD_COMMONS));
+	var field = Ti.UI.createTextField(JMerge(FIELD_COMMONS, {
+		autocorrect:true,
+		hintText:L('hintname')
+	}));
 	
 	FIELDS.name = field;
 	
@@ -154,6 +157,16 @@ NewItem.getCategory = function(){
 
 
 NewItem.save = function(){
+	if(!FIELDS.name.getValue()){
+		CONTROLLER.toast(L('validationrequiredname'));
+		return ;
+	}
+	
+	if(!FIELDS.expireOn.value){
+		CONTROLLER.toast(L('validationrequiredexpireon'));
+		return ;
+	}
+	
 	var values = {_id:FIELDS._id,name:FIELDS.name.getValue(), expireOn:FIELDS.expireOn.value.getTime(), category:FIELDS.category.getValue()};
 	
 	var isInsert = !values._id;
