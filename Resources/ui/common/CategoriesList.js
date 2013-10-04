@@ -2,7 +2,9 @@ var CATEGORIES = {
 	
 };	
 
-
+/**
+ * Class that manages the categories
+ */
 CategoriesList = function(){
 	
 	var self = Ti.UI.createView({
@@ -20,6 +22,9 @@ CategoriesList = function(){
 	return self;
 };
 
+/**
+ * Reloads the categories
+ */
 CategoriesList.reloadData = function(){
 	
 	CONTROLLER.showProgress(L('msgloadingdata'));
@@ -79,6 +84,10 @@ CategoriesList.reloadData = function(){
 	
 };
 
+/**
+ * Adds a new category
+ * @param {Object} e
+ */
 CategoriesList.addItem = function(e){
 	var rowIndex = e.source.rowIndex;
 	var _name = CATEGORIES[rowIndex].getValue();
@@ -91,6 +100,10 @@ CategoriesList.addItem = function(e){
 	
 };
 
+/**
+ * Update the modified category
+ * @param {Object} e
+ */
 CategoriesList.saveItem = function(e){
 	var rowIndex = e.source.rowIndex;
 	var _name = CATEGORIES[rowIndex].getValue();
@@ -103,6 +116,10 @@ CategoriesList.saveItem = function(e){
 	CONTROLLER.onCategoriesChange();
 };
 
+/**
+ * Deletes the category
+ * @param {Object} e
+ */
 CategoriesList.deleteItem = function(e){
 	var rowIndex = e.source.rowIndex;
 	CONTROLLER.getDataBinder().deleteCategory(rowIndex);
@@ -111,7 +128,9 @@ CategoriesList.deleteItem = function(e){
 	CONTROLLER.onCategoriesChange();
 };
 
-
+/**
+ * Loads data from DataBinder
+ */
 CategoriesList.getData = function(){
 	return CONTROLLER.getDataBinder().getCategories();
 };

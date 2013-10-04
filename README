@@ -2,7 +2,25 @@ EXPIRED
 Track your food expirations
 -----------------
 
-TODO
+This is a Titanium App used to track your food expirations.
+
+You can organize your food in categories and provide an expiration for every item.
+
+Your items will be sorted in order of expiration date.
+
+-----
+
+TODO:
+	-Notify when an item is expiring in the device status bar
+	-Synchronize items with a remote service
+	-Push notifications of expirations
+	-Take a picture of the item
+
+CHANGELOG:
+	[V. 1.0]
+	This is the first version of the application.
+	Everything works in local environment
+	
 
 
 

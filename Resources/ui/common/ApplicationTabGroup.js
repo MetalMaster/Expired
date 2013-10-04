@@ -1,6 +1,10 @@
 
+/**
+ * This is the main tabgroup of the app
+ * @param {Object} Window
+ * @param {Object} expirationList
+ */
 function ApplicationTabGroup(Window,expirationList) {
-	//create module instance
 	var self = Ti.UI.createTabGroup();
 	
 	self.win1 = new Window(L('expirationlist'));

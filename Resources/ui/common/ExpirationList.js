@@ -1,3 +1,6 @@
+/**
+ * Component to display and manage Expirations
+ */
 ExpirationList = function(){
 	var self = Ti.UI.createListView({
 		templates: { 'plain': ExpirationList.getTemplates() },
@@ -10,6 +13,9 @@ ExpirationList = function(){
 	return self;
 };
 
+/**
+ * Gets the expiration row templates
+ */
 ExpirationList.getTemplates = function(){
 	
 	var self = {
@@ -65,11 +71,18 @@ ExpirationList.getTemplates = function(){
 	return self;
 };
 
-
+/**
+ * Fired when a row has been clicked by the user
+ * @param {Object} e
+ */
 ExpirationList.onClick = function(e){
 	CONTROLLER.onExpirationEdit({itemId:e.itemId});
 };
 
+/**
+ * Fired when a row has been long pressed
+ * @param {Object} e
+ */
 ExpirationList.onLongPress = function(e){
 	var dialog = Ti.UI.createOptionDialog({
 		  cancel: 2,
@@ -89,6 +102,10 @@ ExpirationList.onLongPress = function(e){
 	dialog.show();
 };
 
+/**
+ * Fired when a swipe occurs on a row
+ * @param {Object} e
+ */
 ExpirationList.onSwipe = function(e){
 	var dialog = Ti.UI.createAlertDialog({
 	    cancel: 1,
@@ -105,11 +122,18 @@ ExpirationList.onSwipe = function(e){
     dialog.show();
 };
 
+/**
+ * Removes an expiration item
+ * @param {Object} _itemId
+ */
 ExpirationList.removeItem = function(_itemId){
 	CONTROLLER.onExpirationDelete({itemId:_itemId});
 	CONTROLLER.toast(L('msgitemremoved'));
 };
 
+/**
+ * Reloads expirations list
+ */
 ExpirationList.reloadData = function(){
 	
 	CONTROLLER.showProgress(L('msgloadingdata'));
@@ -157,6 +181,9 @@ ExpirationList.reloadData = function(){
 	
 };
 
+/**
+ * Queries the databinder to get data
+ */
 ExpirationList.getData = function(){
 	return CONTROLLER.getDataBinder().getExpirations();
 };

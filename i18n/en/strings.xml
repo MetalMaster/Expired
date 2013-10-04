@@ -37,5 +37,5 @@
 
 	<!-- ABOUT -->
 	<string name="abouttitle">About</string>
-	<string name="aboutcontent">Expired V.1.0\nTrack your food expirations</string>
+	<string name="aboutcontent">Expired V.1.0\nTrack your food expirations\nYou can organize your food in categories and provide an expiration for every item.\nYour items will be sorted in order of expiration date.</string>
 </resources>

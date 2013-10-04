@@ -30,20 +30,9 @@ var FIELDS = {
 };
 
 
-
-
-JMerge = function(defaults, newJson){
-	
-	if(!newJson)
-		return defaults;
-	
-	for(val in newJson)
-		defaults[val] = newJson[val];
-		
-	return defaults;
-	
-};
-
+/**
+ * Expiration Item form component
+ */
 NewItem = function(){
 	
 	var self = Ti.UI.createView({
@@ -69,6 +58,10 @@ NewItem = function(){
 	
 };
 
+/**
+ * Binds the Item form with the values provided
+ * @param json The values to bind the form to
+ */
 NewItem.bindValues = function(json){
 	FIELDS._id = json._id;
 	FIELDS.name.setValue(json.name);
@@ -85,16 +78,20 @@ NewItem.bindValues = function(json){
 	}
 };
 
+/**
+ * Gets the "Name" row
+ * @return A View that displays the "name" input field
+ */
 NewItem.getName = function(){
 	
-	var self = Ti.UI.createView(JMerge(ROW_COMMONS));
+	var self = Ti.UI.createView(CONTROLLER.JMerge(ROW_COMMONS));
 	
-	var label = Ti.UI.createLabel(JMerge(LABEL_COMMONS, {
+	var label = Ti.UI.createLabel(CONTROLLER.JMerge(LABEL_COMMONS, {
 		text:L('labelname')
 	}));
 	
 	
-	var field = Ti.UI.createTextField(JMerge(FIELD_COMMONS, {
+	var field = Ti.UI.createTextField(CONTROLLER.JMerge(FIELD_COMMONS, {
 		autocorrect:true,
 		hintText:L('hintname')
 	}));
@@ -107,15 +104,19 @@ NewItem.getName = function(){
 	return self;
 };
 
+/**
+ * Gets the expireOn row
+ * @return a View that displays the expireOn field
+ */
 NewItem.getExpireOn = function(){
 	
-	var self = Ti.UI.createView(JMerge(ROW_COMMONS));
+	var self = Ti.UI.createView(CONTROLLER.JMerge(ROW_COMMONS));
 	
-	var label = Ti.UI.createLabel(JMerge(LABEL_COMMONS, {
+	var label = Ti.UI.createLabel(CONTROLLER.JMerge(LABEL_COMMONS, {
 		text:L('labelexpireon')
 	}));
 	
-	var field = Ti.UI.createLabel(JMerge(FIELD_COMMONS,{
+	var field = Ti.UI.createLabel(CONTROLLER.JMerge(FIELD_COMMONS,{
 		text:L('hintexpireon')
 	}));
 	
@@ -146,26 +147,20 @@ NewItem.getExpireOn = function(){
 	return self;
 };
 
+/**
+ * Gets the category form row
+ * @return a View that displays the category field
+ */
 NewItem.getCategory = function(){
-	var self = Ti.UI.createView(JMerge(ROW_COMMONS));
+	var self = Ti.UI.createView(CONTROLLER.JMerge(ROW_COMMONS));
 	
-	var label = Ti.UI.createLabel(JMerge(LABEL_COMMONS, {
+	var label = Ti.UI.createLabel(CONTROLLER.JMerge(LABEL_COMMONS, {
 		text:L('labelcategory')
 	}));
 	
-	var field = Ti.UI.createPicker(JMerge(FIELD_COMMONS,{type:Ti.UI.PICKER_TYPE_PLAIN}));
+	var field = Ti.UI.createPicker(CONTROLLER.JMerge(FIELD_COMMONS,{type:Ti.UI.PICKER_TYPE_PLAIN}));
 	
 	FIELDS.category = field;
-	/*FIELDS.categories = CONTROLLER.getDataBinder().getCategories();
-	var data = [];
-	for(var i=0; i<FIELDS.categories.length; i++){
-		var cat = FIELDS.categories[i];
-		data.push(Ti.UI.createPickerRow({title:cat.name, itemId:cat._id}));
-	}
-	FIELDS.category.add(data);
-	FIELDS.category.selectionIndicator = true;
-	*/
-	
 	
 	self.add(label);
 	self.add(field);
@@ -173,10 +168,13 @@ NewItem.getCategory = function(){
 	return self;
 };
 
+/**
+ * Reloads the categories field
+ */
 NewItem.reloadCategories = function(){
 	FIELDS.categoryRow.remove(FIELDS.category);
 	FIELDS.categories = CONTROLLER.getDataBinder().getCategories();
-	FIELDS.category = Ti.UI.createPicker(JMerge(FIELD_COMMONS,{type:Ti.UI.PICKER_TYPE_PLAIN}));
+	FIELDS.category = Ti.UI.createPicker(CONTROLLER.JMerge(FIELD_COMMONS,{type:Ti.UI.PICKER_TYPE_PLAIN}));
 	
 	if(FIELDS.categories && FIELDS.categories.length > 0){
 		var data = [];
@@ -191,7 +189,9 @@ NewItem.reloadCategories = function(){
 	
 };
 
-
+/**
+ * Save the new/updated item
+ */
 NewItem.save = function(){
 	if(!FIELDS.name.getValue()){
 		CONTROLLER.toast(L('validationrequiredname'));
@@ -210,7 +210,7 @@ NewItem.save = function(){
 		return;
 	}
 	
-	var values = {_id:FIELDS._id,name:FIELDS.name.getValue(), expireOn:FIELDS.expireOn.value.getTime(), category:FIELDS.categoryRow.itemId};
+	var values = {_id:FIELDS._id,name:FIELDS.name.getValue(), expireOn:FIELDS.expireOn.value.getTime(), category:categoryRow.itemId};
 	
 	var isInsert = !values._id;
 	
@@ -229,6 +229,9 @@ NewItem.save = function(){
 	CONTROLLER.getTabGroup().setActiveTab(0);
 };
 
+/**
+ * Reset the form values
+ */
 NewItem.reset = function(){
 	FIELDS._id = null;
 	FIELDS.name.setValue(null);
@@ -238,7 +241,10 @@ NewItem.reset = function(){
 
 
 
-
+/**
+ * Gets a row with the action buttons
+ * @return a View that displays the action buttons in the form
+ */
 NewItem.getButtons = function(){
 	var self = Ti.UI.createView({
 		layout:"horizontal",

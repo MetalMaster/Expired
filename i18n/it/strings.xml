@@ -37,5 +37,5 @@
 	
 	<!-- ABOUT -->
 	<string name="abouttitle">Informazioni</string>
-	<string name="aboutcontent">Expired V.1.0\nTieni sotto controllo le scadenze dei tuoi alimenti</string>
+	<string name="aboutcontent">Expired V.1.0\nTieni sotto controllo le scadenze dei tuoi alimenti.\nPuoi inserire i tuoi alimenti, categorizzarli e renderti conto subito delle scadenze.</string>
 </resources>

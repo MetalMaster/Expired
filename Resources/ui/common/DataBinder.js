@@ -1,6 +1,7 @@
 var TABLES = [
-	"drop table expirations",
-	"drop table categories",
+	//Used for debug
+	//"drop table expirations",
+	//"drop table categories", 
 	"create table if not exists expirations (_id TEXT,name TEXT, expireOn INTEGER, category TEXT)",
 	"create table if not exists categories (_id TEXT,name TEXT)"
 ];
@@ -17,23 +18,41 @@ var SQL = {
 	DELETE_CATEGORY:"delete from categories where _id = ?"
 };
 
+/**
+ * DataBinder component
+ */
 DataBinder = function(){
 	
 	this.DB_NAME = "Expired";
 	
+	/**
+	 * Initialize the component
+	 */
 	this.initialize = function(){
 		this.checkTables();
-		this.insertDummyData();
+		//Used for debug
+		//this.insertDummyData();
 	};
 	
+	/**
+	 * Opens a session with the DB
+	 * @return The session object
+	 */
 	this.openSession = function(){
 		return Ti.Database.open(this.DB_NAME);
 	};
 	
+	/**
+	 * Close a session with the db
+	 * @param db The db session
+	 */
 	this.closeSession = function(db){
 		db.close();
 	};
 	
+	/**
+	 * Creates tables
+	 */
 	this.checkTables = function(){
 		var db = this.openSession();
 		for(var i=0; i<TABLES.length; i++){
@@ -46,6 +65,10 @@ DataBinder = function(){
 		this.closeSession(db);
 	};
 	
+	/**
+	 * Gets the expirations list
+	 * @return An array of expirations
+	 */
 	this.getExpirations = function(){
 		var db = this.openSession();
 		var rows = db.execute(SQL.SELECT_EXPIRATIONS);
@@ -67,6 +90,10 @@ DataBinder = function(){
 		return array;
 	};
 	
+	/**
+	 * Gets the categories list
+	 * @return An array of categories
+	 */
 	this.getCategories = function(){
 		var db =this.openSession();
 		var rows = db.execute(SQL.SELECT_CATEGORIES);
@@ -85,6 +112,11 @@ DataBinder = function(){
 		return array;
 	};
 	
+	/**
+	 * Gets a single expiration item
+	 * @param itemId The expiration item id
+	 * @return The Expiration item object
+	 */
 	this.getItem = function(itemId){
 		var db = this.openSession();
 		var rows = db.execute(SQL.SELECT_EXPIRATION, itemId);
@@ -100,6 +132,11 @@ DataBinder = function(){
 		return json;
 	};
 	
+	/**
+	 * Insert a new Expiration
+	 * @param json The Expiration json
+	 * @return The New expiration id
+	 */
 	this.insertExpiration = function(json){
 		var db = this.openSession();
 		
@@ -114,6 +151,11 @@ DataBinder = function(){
 		return json._id;
 	};
 	
+	/**
+	 * Insert a new category
+	 * @param json The Category json
+	 * @return The new Category id
+	 */
 	this.insertCategory = function(json){
 		var db = this.openSession();
 		
@@ -128,6 +170,10 @@ DataBinder = function(){
 		return json._id;
 	};
 	
+	/**
+	 * Updates an expiration item
+	 * @param json The expiration json
+	 */
 	this.updateExpiration = function(json){
 		var db = this.openSession();
 		
@@ -139,6 +185,10 @@ DataBinder = function(){
 	
 	};
 	
+	/**
+	 * Updates a category item
+	 * @param json The category json
+	 */
 	this.updateCategory = function(json){
 		var db = this.openSession();
 		
@@ -150,6 +200,10 @@ DataBinder = function(){
 	
 	};
 	
+	/**
+	 * Deletes an expiration item
+	 * @param _id The Expiration item id to delete
+	 */
 	this.deleteExpiration = function(_id){
 		var db = this.openSession();
 		
@@ -158,6 +212,10 @@ DataBinder = function(){
 		this.closeSession(db);
 	};
 	
+	/**
+	 * Deletes a category item
+	 * @param _id The category item id to delete
+	 */
 	this.deleteCategory = function(_id){
 		var db = this.openSession();
 		
@@ -166,7 +224,9 @@ DataBinder = function(){
 		this.closeSession(db);
 	};
 	
-	
+	/**
+	 * Insert dummy data (just for debugging purposes)
+	 */
 	this.insertDummyData = function(){
 		var bevandeId = this.insertCategory({
 			_id:null,
