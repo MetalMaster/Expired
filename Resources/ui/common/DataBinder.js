@@ -12,7 +12,9 @@ var SQL = {
 	SELECT_CATEGORIES:"select _id,name from categories order by name asc",
 	SELECT_EXPIRATION:"select _id,name,expireOn,category,(select name from categories C where C._id = E.category) as categoryDesc  from expirations E where _id = ?",
 	UPDATE_EXPIRATION:"update expirations set name = ?, expireOn = ?, category = ? where _id = ?",
-	DELETE_EXPIRATION:"delete from expirations where _id = ?"
+	UPDATE_CATEGORY:"update categories set name = ? where _id = ?",
+	DELETE_EXPIRATION:"delete from expirations where _id = ?",
+	DELETE_CATEGORY:"delete from categories where _id = ?"
 };
 
 DataBinder = function(){
@@ -137,10 +139,29 @@ DataBinder = function(){
 	
 	};
 	
+	this.updateCategory = function(json){
+		var db = this.openSession();
+		
+		var values = [json.name, json._id];
+		
+		db.execute(SQL.UPDATE_CATEGORY, values);
+		
+		this.closeSession(db);
+	
+	};
+	
 	this.deleteExpiration = function(_id){
 		var db = this.openSession();
 		
 		db.execute(SQL.DELETE_EXPIRATION, _id);
+		
+		this.closeSession(db);
+	};
+	
+	this.deleteCategory = function(_id){
+		var db = this.openSession();
+		
+		db.execute(SQL.DELETE_CATEGORY, _id);
 		
 		this.closeSession(db);
 	};

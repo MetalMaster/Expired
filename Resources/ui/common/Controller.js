@@ -42,7 +42,8 @@ Controller = function(){
 		});
 		
 		Ti.App.addEventListener(this.events.CATEGORIES_CHANGE,function(){
-			self.components.CATEGORIES_LIST.reload();	
+			self.components.CATEGORIES_LIST.reload();
+			self.components.EXPIRATION_LIST.reload();	
 		});
 		
 		Ti.App.addEventListener(this.events.EXPIRATION_EDIT,function(e){
@@ -63,6 +64,10 @@ Controller = function(){
 	
 	this.onExpirationsChange = function(payLoad){
 		this.fireEvent(CONTROLLER.events.EXPIRATIONS_CHANGE, payLoad);
+	};
+	
+	this.onCategoriesChange = function(payLoad){
+		this.fireEvent(CONTROLLER.events.CATEGORIES_CHANGE);
 	};
 	
 	this.onExpirationEdit = function(payLoad){

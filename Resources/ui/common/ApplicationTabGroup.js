@@ -32,6 +32,10 @@ function ApplicationTabGroup(Window,expirationList) {
 	});
 	self.win3.containingTab = tab3;
 	
+	tab3.addEventListener("click", function(){
+		CONTROLLER.getItemForm().reloadCategories();
+	});
+	
 	self.addTab(tab1);
 	self.addTab(tab2);
 	self.addTab(tab3);

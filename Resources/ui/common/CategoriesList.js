@@ -1,7 +1,15 @@
+var CATEGORIES = {
+	
+};	
+
+
 CategoriesList = function(){
-	var self = Ti.UI.createListView({
-		templates: { 'plain': CategoriesList.getTemplates() },
-    	defaultItemTemplate: 'plain'               
+	
+	var self = Ti.UI.createView({
+		layout:"vertical",
+		width:Ti.UI.FILL,
+		height:Ti.UI.FILL,
+		top:0
 	});
 	
 	self.reload = CategoriesList.reloadData;
@@ -12,46 +20,6 @@ CategoriesList = function(){
 	return self;
 };
 
-CategoriesList.getTemplates = function(){
-	
-	var self = {
-	    childTemplates: [
-	        {
-	            type: 'Ti.UI.TextField',
-	            bindId: 'name',  
-	            properties: {
-	                left: '10dp',
-	                color:"black",
-	                top:"5dp",
-	                font: { fontFamily:'Arial', fontSize: '15dp', fontWeight:'bold' },
-	                verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_TOP,
-	                width:"50%"
-	            }
-	        },
-	        {
-	        	type:"Ti.UI.Button",
-	        	properties:{
-	        		title:"Save",
-	        		verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_TOP,
-	        		right:"50dp"
-	        	}
-	        },
-	        {
-	        	type:"Ti.UI.Button",
-	        	properties:{
-	        		title:"Delete",
-	        		width:"20%",
-	        		verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_TOP,
-	        		right:"5dp"
-	        	}
-	        }
-	    ],
-	};
-	
-	return self;
-};
-
-
 CategoriesList.reloadData = function(){
 	
 	CONTROLLER.showProgress(L('msgloadingdata'));
@@ -61,36 +29,88 @@ CategoriesList.reloadData = function(){
 	var section = Ti.UI.createListSection();
 	
 	var items = [];
+	CATEGORIES = {};
+	this.removeAllChildren();
 	
-	if(data){
+	if(data && data.length > 0){
+		
 		for(var i=0, ilen=data.length; i<ilen; i++){
-			var item = data[i];
-			items.push(
-				{
-					name:{value:item.name},
-					properties : {
-			            itemId: item._id
-			        }
-				});
+			 var item = data[i];
+			 
+			 var row = Ti.UI.createView({
+			 	height:100,
+				layout:"composite",
+				touchEnabled:false
+			 });
+			 
+			CATEGORIES[item._id] = Ti.UI.createTextField({value:item.name,left:5, width:"50%",focusable:true});
+			row.add(CATEGORIES[item._id]);
+			var saveButton = Ti.UI.createButton({title:"Save", left:"50%", rowIndex:item._id});
+			saveButton.addEventListener("click", CategoriesList.saveItem);
+			row.add(saveButton);
+			
+			var deleteButton = Ti.UI.createButton({title:"Delete", left:"70%", rowIndex:item._id});
+			deleteButton.addEventListener("click", CategoriesList.deleteItem);
+			row.add(deleteButton);
+			
+			this.add(row);
+			
 		}
 	}
 	
-	items.push({
-		name:{value:null},
-		properties:{
-			itemId:null
-		}
-	});
+	 var row = Ti.UI.createView({
+	 	height:100,
+		layout:"composite",
+		touchEnabled:false
+	 });
+	  
+	  CATEGORIES.NEW = Ti.UI.createTextField({left:5, width:"50%",focusable:true});
+	  
+	  row.add(CATEGORIES.NEW);
+	  var addButton = Ti.UI.createButton({title:"Add", rowIndex:"NEW",left:"50%"});
+	  addButton.addEventListener("click", CategoriesList.addItem);
+	  
+	  row.add(addButton);
 	
-	section.setItems(items);
-	if(this.getSectionCount() > 0)
-		this.replaceSectionAt(0, section);				
-	else
-		this.appendSection(section);
+	  this.add(row);
+	
 		
 	CONTROLLER.hideProgress();
 	
 };
+
+CategoriesList.addItem = function(e){
+	var rowIndex = e.source.rowIndex;
+	var _name = CATEGORIES[rowIndex].getValue();
+	CONTROLLER.getDataBinder().insertCategory({
+		name:_name
+	});
+	CONTROLLER.toast(L('msgitemsaved'));
+	
+	CONTROLLER.onCategoriesChange();
+	
+};
+
+CategoriesList.saveItem = function(e){
+	var rowIndex = e.source.rowIndex;
+	var _name = CATEGORIES[rowIndex].getValue();
+	CONTROLLER.getDataBinder().updateCategory({
+		_id:rowIndex,
+		name:_name
+	});
+	CONTROLLER.toast(L('msgitemsaved'));
+	
+	CONTROLLER.onCategoriesChange();
+};
+
+CategoriesList.deleteItem = function(e){
+	var rowIndex = e.source.rowIndex;
+	CONTROLLER.getDataBinder().deleteCategory(rowIndex);
+	CONTROLLER.toast(L('msgitemsaved'));
+	
+	CONTROLLER.onCategoriesChange();
+};
+
 
 CategoriesList.getData = function(){
 	return CONTROLLER.getDataBinder().getCategories();

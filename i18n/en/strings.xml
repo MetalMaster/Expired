@@ -15,6 +15,7 @@
 	<string name="hintexpireon">Click here to select</string>
 	<string name="validationrequiredname">The field "name" is mandatory</string>
 	<string name="validationrequiredexpireon">The field "expiration date" is mandatory</string>
+	<string name="validationrequiredcategory">The field "category" is mandatory</string>
 	
 	<!-- ACTIONS -->
 	<string name="buttonsave">Save</string>

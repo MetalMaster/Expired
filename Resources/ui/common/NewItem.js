@@ -24,8 +24,12 @@ var FIELDS = {
 	_id:null,
 	name:null,
 	expireOn:null,
-	category:null
+	category:null,
+	categoryId:null,
+	categories:null
 };
+
+
 
 
 JMerge = function(defaults, newJson){
@@ -51,10 +55,15 @@ NewItem = function(){
 	
 	self.add(NewItem.getName());
 	self.add(NewItem.getExpireOn());
-	self.add(NewItem.getCategory());
+	FIELDS.categoryRow = NewItem.getCategory();
+	self.add(FIELDS.categoryRow);
 	self.add(NewItem.getButtons());
 	
 	self.bindValues = NewItem.bindValues;
+	
+	self.reloadCategories = NewItem.reloadCategories;
+	
+	self.reloadCategories(); //FIXME
 	
 	return self;
 	
@@ -65,7 +74,15 @@ NewItem.bindValues = function(json){
 	FIELDS.name.setValue(json.name);
 	FIELDS.expireOn.value = CONTROLLER.parseDate(json.expireOn);
 	FIELDS.expireOn.setText(CONTROLLER.formatDate(CONTROLLER.parseDate(json.expireOn)));
-	FIELDS.category.setValue(json.category);
+	FIELDS.categoryId = json.category;
+	FIELDS.categories = CONTROLLER.getDataBinder().getCategories();
+	for(var i=0; i<FIELDS.categories.length; i++){
+		var cat = FIELDS.categories[i];
+		if(cat._id == FIELDS.categoryId){
+			FIELDS.category.setValue(cat.name);
+			FIELDS.category.setSelectedRow(0,i);
+		}
+	}
 };
 
 NewItem.getName = function(){
@@ -136,25 +153,42 @@ NewItem.getCategory = function(){
 		text:L('labelcategory')
 	}));
 	
-	var field = Ti.UI.createPicker(JMerge(FIELD_COMMONS));
+	var field = Ti.UI.createPicker(JMerge(FIELD_COMMONS,{type:Ti.UI.PICKER_TYPE_PLAIN}));
 	
 	FIELDS.category = field;
-	
-	
-	var categories = CONTROLLER.getDataBinder().getCategories();
+	/*FIELDS.categories = CONTROLLER.getDataBinder().getCategories();
 	var data = [];
-	for(var i=0; i<categories.length; i++){
-		var cat = categories[i];
-		data.push(Ti.UI.createPickerRow({title:cat.name, id:cat._id}));
+	for(var i=0; i<FIELDS.categories.length; i++){
+		var cat = FIELDS.categories[i];
+		data.push(Ti.UI.createPickerRow({title:cat.name, itemId:cat._id}));
 	}
+	FIELDS.category.add(data);
+	FIELDS.category.selectionIndicator = true;
+	*/
 	
-	field.add(data);
-	field.selectionIndicator = true;
 	
 	self.add(label);
 	self.add(field);
 	
 	return self;
+};
+
+NewItem.reloadCategories = function(){
+	FIELDS.categoryRow.remove(FIELDS.category);
+	FIELDS.categories = CONTROLLER.getDataBinder().getCategories();
+	FIELDS.category = Ti.UI.createPicker(JMerge(FIELD_COMMONS,{type:Ti.UI.PICKER_TYPE_PLAIN}));
+	
+	if(FIELDS.categories && FIELDS.categories.length > 0){
+		var data = [];
+		for(var i=0; i<FIELDS.categories.length; i++){
+			var cat = FIELDS.categories[i];
+			data.push(Ti.UI.createPickerRow({title:cat.name, itemId:cat._id}));
+		}
+		FIELDS.category.add(data);
+		FIELDS.category.selectionIndicator = true;
+		FIELDS.categoryRow.add(FIELDS.category);
+	}
+	
 };
 
 
@@ -169,7 +203,14 @@ NewItem.save = function(){
 		return ;
 	}
 	
-	var values = {_id:FIELDS._id,name:FIELDS.name.getValue(), expireOn:FIELDS.expireOn.value.getTime(), category:FIELDS.category.getValue()};
+	var categoryRow = FIELDS.category.getSelectedRow(0);
+	
+	if(!categoryRow){
+		CONTROLLER.toast(L('validationrequiredcategory'));
+		return;
+	}
+	
+	var values = {_id:FIELDS._id,name:FIELDS.name.getValue(), expireOn:FIELDS.expireOn.value.getTime(), category:FIELDS.categoryRow.itemId};
 	
 	var isInsert = !values._id;
 	
@@ -232,5 +273,6 @@ NewItem.getButtons = function(){
 	
 	return self;
 };
+
 
 module.exports = NewItem;
