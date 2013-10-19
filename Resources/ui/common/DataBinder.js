@@ -2,17 +2,18 @@ var TABLES = [
 	//Used for debug
 	//"drop table expirations",
 	//"drop table categories", 
+	//FIXME: manage alter table to add quantity column
 	"create table if not exists expirations (_id TEXT,name TEXT, expireOn INTEGER, category TEXT)",
 	"create table if not exists categories (_id TEXT,name TEXT)"
 ];
 
 var SQL = {
-	INSERT_EXPIRATION:"insert into expirations (_id,name,expireOn,category) values (?,?,?,?)",
+	INSERT_EXPIRATION:"insert into expirations (_id,name,quantity,expireOn,category) values (?,?,?,?,?)",
 	INSERT_CATEGORY:"insert into categories (_id,name) values (?,?)",
-	SELECT_EXPIRATIONS:"select _id,name,expireOn,category,(select name from categories C where C._id = E.category) as categoryDesc from expirations E order by expireOn asc",
+	SELECT_EXPIRATIONS:"select _id,name,quantity,expireOn,category,(select name from categories C where C._id = E.category) as categoryDesc from expirations E order by expireOn asc",
 	SELECT_CATEGORIES:"select _id,name from categories order by name asc",
-	SELECT_EXPIRATION:"select _id,name,expireOn,category,(select name from categories C where C._id = E.category) as categoryDesc  from expirations E where _id = ?",
-	UPDATE_EXPIRATION:"update expirations set name = ?, expireOn = ?, category = ? where _id = ?",
+	SELECT_EXPIRATION:"select _id,name,quantity,expireOn,category,(select name from categories C where C._id = E.category) as categoryDesc  from expirations E where _id = ?",
+	UPDATE_EXPIRATION:"update expirations set name = ?, quantity = ?, expireOn = ?, category = ? where _id = ?",
 	UPDATE_CATEGORY:"update categories set name = ? where _id = ?",
 	DELETE_EXPIRATION:"delete from expirations where _id = ?",
 	DELETE_CATEGORY:"delete from categories where _id = ?"
@@ -78,6 +79,7 @@ DataBinder = function(){
 		  var json = {
 		  		_id:rows.fieldByName('_id'),
 		  		name:rows.fieldByName('name'),
+		  		quantity:rows.fieldByName('quantity'),
 		  		expireOn:rows.fieldByName('expireOn'),
 		  		category:rows.fieldByName('category'),
 		  		categoryDesc:rows.fieldByName('categoryDesc')
@@ -124,6 +126,7 @@ DataBinder = function(){
 	  	var json = {
 	  		_id:rows.fieldByName('_id'),
 	  		name:rows.fieldByName('name'),
+	  		quantity:rows.fieldByName('quantity'),
 	  		expireOn:rows.fieldByName('expireOn'),
 	  		category:rows.fieldByName('category'),
 	  		categoryDesc:rows.fieldByName('categoryDesc')
@@ -142,7 +145,7 @@ DataBinder = function(){
 		
 		json._id = ""+new Date().getTime();
 			
-		var values = [json._id, json.name, json.expireOn, json.category];
+		var values = [json._id, json.name, json.quantity, json.expireOn, json.category];
 		
 		db.execute(SQL.INSERT_EXPIRATION, values);
 		
@@ -177,7 +180,7 @@ DataBinder = function(){
 	this.updateExpiration = function(json){
 		var db = this.openSession();
 		
-		var values = [json.name, json.expireOn, json.category, json._id];
+		var values = [json.name, json.quantity,json.expireOn, json.category, json._id];
 		
 		db.execute(SQL.UPDATE_EXPIRATION, values);
 		

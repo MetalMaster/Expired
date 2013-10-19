@@ -7,11 +7,13 @@
 	
 	<!-- LABELS -->
 	<string name="labelname">Name:</string>
+	<string name="labelquantity">Quantity:</string>
 	<string name="labelexpireon">Expiration date:</string>
 	<string name="labelcategory">Category:</string>
 	
 	<!-- FIELDS -->
 	<string name="hintname">Enter item name</string>
+	<string name="hintquantity">Enter item quantity</string>
 	<string name="hintexpireon">Click here to select</string>
 	<string name="validationrequiredname">The field "name" is mandatory</string>
 	<string name="validationrequiredexpireon">The field "expiration date" is mandatory</string>

@@ -26,7 +26,8 @@ var FIELDS = {
 	expireOn:null,
 	category:null,
 	categoryId:null,
-	categories:null
+	categories:null,
+	quantity:null
 };
 
 
@@ -43,6 +44,7 @@ NewItem = function(){
 	});
 	
 	self.add(NewItem.getName());
+	self.add(NewItem.getQuantity());
 	self.add(NewItem.getExpireOn());
 	FIELDS.categoryRow = NewItem.getCategory();
 	self.add(FIELDS.categoryRow);
@@ -65,6 +67,7 @@ NewItem = function(){
 NewItem.bindValues = function(json){
 	FIELDS._id = json._id;
 	FIELDS.name.setValue(json.name);
+	FIELDS.quantity.setValue(json.quantity);
 	FIELDS.expireOn.value = CONTROLLER.parseDate(json.expireOn);
 	FIELDS.expireOn.setText(CONTROLLER.formatDate(CONTROLLER.parseDate(json.expireOn)));
 	FIELDS.categoryId = json.category;
@@ -97,6 +100,32 @@ NewItem.getName = function(){
 	}));
 	
 	FIELDS.name = field;
+	
+	self.add(label);
+	self.add(field);
+	
+	return self;
+};
+
+/**
+ * Gets the "Quantity" row
+ * @return A View that displays the "quantity" input field
+ */
+NewItem.getQuantity = function(){
+	
+	var self = Ti.UI.createView(CONTROLLER.JMerge(ROW_COMMONS));
+	
+	var label = Ti.UI.createLabel(CONTROLLER.JMerge(LABEL_COMMONS, {
+		text:L('labelquantity')
+	}));
+	
+	//FIXME: use the right field type for quantity
+	var field = Ti.UI.createTextField(CONTROLLER.JMerge(FIELD_COMMONS, {
+		autocorrect:true,
+		hintText:L('hintquantity')
+	}));
+	
+	FIELDS.quantity = field;
 	
 	self.add(label);
 	self.add(field);
@@ -210,7 +239,13 @@ NewItem.save = function(){
 		return;
 	}
 	
-	var values = {_id:FIELDS._id,name:FIELDS.name.getValue(), expireOn:FIELDS.expireOn.value.getTime(), category:categoryRow.itemId};
+	var values = {
+			_id:FIELDS._id,
+			name:FIELDS.name.getValue(), 
+			quantity:FIELDS.quantity.getValue(),
+			expireOn:FIELDS.expireOn.value.getTime(), 
+			category:categoryRow.itemId
+	};
 	
 	var isInsert = !values._id;
 	
@@ -235,6 +270,7 @@ NewItem.save = function(){
 NewItem.reset = function(){
 	FIELDS._id = null;
 	FIELDS.name.setValue(null);
+	FIELDS.quantity.setValue(1);
 	FIELDS.expireOn.setText(L('hintexpireon'));
 	FIELDS.category.setValue(null);
 };

@@ -53,6 +53,17 @@ ExpirationList.getTemplates = function(){
 	            	verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_TOP
 	            }
 	        },
+	        
+	            type: 'Ti.UI.Label', 
+	            bindId: 'quantity',
+	            properties:{
+	            	color:"blue",
+	            	font: { fontFamily:'Arial', fontSize: '10dp' },
+	            	left:'10dp',
+	            	top:'60dp',
+	            	verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_TOP
+	            }
+	        },
 	        {
 	            type: 'Ti.UI.ImageView', 
 	            bindId: 'icon',            
@@ -162,6 +173,7 @@ ExpirationList.reloadData = function(){
 					expireOn:{text:CONTROLLER.formatDate(CONTROLLER.parseDate(item.expireOn))},
 					icon:{image:_icon},
 					categoryDesc:{text:item.categoryDesc},
+					quantity:{text:"Q.:"+item.quantity},
 					properties : {
 						category:item.category,
 			            itemId: item._id,
